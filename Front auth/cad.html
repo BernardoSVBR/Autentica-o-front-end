@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="cad.css">
+  <style>
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+    }
+
+    .popup.success {
+      background-color: #c5e1a5;
+    }
+
+    .popup.error {
+      background-color: #ffcdd2;
+    }
+
+    .password-input {
+      position: relative;
+    }
+
+    .password-input input {
+      padding-right: 40px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    .toggle-password i {
+      color: #999;
+    }
+
+    .toggle-password.active i {
+      color: #000;
+    }
+
+    .password-label {
+      color: #000;
+    }
+
+    .toggle-password.show-password i {
+      color: #FF0000;  /* A cor que você deseja quando a senha estiver visível */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="login-center">
+      <div class="login-header">
+        <h1>Cadastre-se no Men+</h1>
+      </div>
+      <div class="login-form-footer">
+        <div class="card social-block">
+          <div class="card-body">
+            <a class="btn btn-block btn-social btn-facebook" href="/auth/facebook" role="button" data-app-id="1049691619339239">
+              <img width="30" src="https://img.icons8.com/?size=512&id=118497&format=png" alt="facebook" class="facebook">
+              Continue com Facebook
+            </a>
+          </div>
+        </div>
+        <a href="#">
+          <img width="30" src="https://img.icons8.com/?size=512&id=V5cGWnc9R4xj&format=png" alt="Google" class="google">
+          Continue com Google
+        </a>
+
+        <div class="horizontal-line-container">
+          <hr class="horizontal-line">
+          <span class="centered-text">ou</span>
+        </div>
+
+        <form class="login-form" id="signup-form">
+          <div class="login-form-content">
+            <div class="form-item">
+              <label for="email"></label>
+              <input type="email" id="email" required placeholder="Adicione o seu e-mail">
+            </div>
+            <div class="form-item" style="padding-top: 10px;">
+              <label for="password" id="passwordLabel"></label>
+              <div class="password-input">
+                <input type="password" id="password" required placeholder="Adicione a sua senha">
+                <span class="toggle-password" id="togglePassword" onclick="togglePasswordVisibility()">
+                  <i id="togglePasswordIcon" class="fas fa-eye"></i>
+                </span>
+              </div>
+              <span id="passwordError" class="error-message"></span>
+            </div>
+            <div class="form-item">
+              <div class="checkbox">
+                <input type="checkbox" id="rememberMeCheckbox" checked>
+                <label for="rememberMeCheckbox" class="checkboxLabel" required>Eu concordo com os termos de usos do Men+</label>
+              </div>
+            </div>
+            <button type="submit">Criar conta</button>
+          </div>
+        </div>
+        <p style="text-align:center; margin-top: 15px;"><a href="log.html">Já possui uma conta?</a></p>
+      </form>
+    </div>
+  </div>
+  <div id="messageContainer" style="display: none;"></div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const passwordInput = document.getElementById("password");
+    const passwordError = document.getElementById("passwordError");
+    const messageContainer = document.getElementById("messageContainer");
+    const passwordLabel = document.getElementById("passwordLabel");
+    const togglePassword = document.getElementById("togglePassword");
+
+    passwordInput.addEventListener("input", function () {
+      const password = passwordInput.value;
+      let missingCharacters = "";
+
+      if (password.length < 8) {
+        if (!/(?=.*[a-z])/.test(password)) {
+          missingCharacters += "uma letra minúscula, ";
+        }
+        if (!/(?=.*[A-Z])/.test(password)) {
+          missingCharacters += "uma letra maiúscula, ";
+        }
+        if (!/(?=.*\d)/.test(password)) {
+          missingCharacters += "um número, ";
+        }
+
+        passwordError.textContent = `A senha deve conter pelo menos 8 caracteres e incluir ${missingCharacters.slice(0, -2)}.`;
+      } else {
+        if (
+          !/(?=.*[a-z])/.test(password) ||
+          !/(?=.*[A-Z])/.test(password) ||
+          !/(?=.*\d)/.test(password)
+        ) {
+          passwordError.textContent = "A senha deve incluir pelo menos uma letra minúscula, uma letra maiúscula e um número.";
+        } else {
+          passwordError.textContent = "";
+        }
+      }
+    });
+
+    const signupForm = document.getElementById("signup-form");
+
+    signupForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const data = {
+        email: email,
+        password: password
+      };
+
+      axios.post("http://localhost:3000/signup", data)
+        .then(function (response) {
+          showMessage(response.data.message, "success");
+          setTimeout(() => {
+            redirectToLogin();
+          }, 2000); // Aguarda 2 segundos antes de redirecionar para a tela de login
+        })
+        .catch(function (error) {
+          if (error.response && error.response.data && error.response.data.message) {
+            showMessage(error.response.data.message, "error");
+          } else {
+            showMessage("Ocorreu um erro no servidor.", "error");
+          }
+        });
+    });
+
+    function showMessage(message, type) {
+      const popup = document.createElement("div");
+      popup.classList.add("popup");
+      popup.classList.add(type);
+      popup.textContent = message;
+      document.body.appendChild(popup);
+
+      setTimeout(function () {
+        popup.remove();
+      }, 3000);
+    }
+
+    function redirectToLogin() {
+      window.location.href = "login.html";
+    }
+
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById("password");
+      const togglePasswordIcon = document.getElementById("togglePasswordIcon");
+
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        togglePasswordIcon.classList.add("active");
+        togglePassword.classList.add("show-password");
+      } else {
+        passwordInput.type = "password";
+        togglePasswordIcon.classList.remove("active");
+        togglePassword.classList.remove("show-password");
+      }
+    }
+  </script>
+</body>
+
+</html>

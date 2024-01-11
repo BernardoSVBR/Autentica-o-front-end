@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="log.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="login-center">
+            <div class="login-header">
+                <h1>Entre no Men+</h1>
+            </div>
+            <div class="login-form-footer">
+                <div class="card social-block">
+                    <div class="card-body">
+                        <a class="btn btn-block btn-social btn-facebook" href="/auth/facebook" role="button"
+                            data-app-id="1049691619339239">
+                            <img width="30" src="https://img.icons8.com/?size=512&id=118497&format=png" alt="facebook"
+                                class="facebook">
+                            Continue com Facebook
+                        </a>
+                    </div>
+                </div>
+                <a href="#">
+                    <img width="30" src="https://img.icons8.com/?size=512&id=V5cGWnc9R4xj&format=png" alt="Google"
+                        class="google">
+                    Continue com Google
+                </a>
+
+                <div class="horizontal-line-container">
+                    <hr class="horizontal-line">
+                    <span class="centered-text">ou</span>
+                </div>
+                <form class="login-form">
+                    <div class="login-form-content">
+                        <div class="form-item">
+                            <label for="email"></label>
+                            <input type="email" id="email" required placeholder="Adicione o seu e-mail">
+                        </div>
+                        <div class="form-item" style="padding-top: 10px;">
+                            <label for="password"></label>
+                            <input type="password" id="password" required placeholder="Adicione a sua senha">
+                            <span id="passwordError" class="error-message"></span>
+                        </div>
+                        <button type="submit">Entrar</button>
+                    </div>
+            </div>
+            <div>
+                <p style="text-align:center; margin-top: 15px;"><a href="rec.html">Esqueceu a sua senha?</a></p>
+                <p style="text-align:center; margin-top: 15px;">Não tem uma conta? <a  href="cad.html">Crie uma
+                        agora!</a></p></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById("password");
+        const passwordError = document.getElementById("passwordError");
+
+        passwordInput.addEventListener("input", function () {
+            const password = passwordInput.value;
+            let missingCharacters = "";
+
+            if (password.length < 8) {
+                if (!/(?=.*[a-z])/.test(password)) {
+                    missingCharacters += "uma letra minúscula, ";
+                }
+                if (!/(?=.*[A-Z])/.test(password)) {
+                    missingCharacters += "uma letra maiúscula, ";
+                }
+                if (!/(?=.*\d)/.test(password)) {
+                    missingCharacters += "um número, ";
+                }
+
+                passwordError.textContent = `A senha deve conter pelo menos 8 caracteres e incluir ${missingCharacters.slice(0, -2)}.`;
+            } else {
+                if (
+                    !/(?=.*[a-z])/.test(password) ||
+                    !/(?=.*[A-Z])/.test(password) ||
+                    !/(?=.*\d)/.test(password)
+                ) {
+                    passwordError.textContent = "A senha deve incluir pelo menos uma letra minúscula, uma letra maiúscula e um número.";
+                } else {
+                    passwordError.textContent = "";
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

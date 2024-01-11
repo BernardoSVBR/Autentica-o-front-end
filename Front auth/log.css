@@ -1,0 +1,136 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap");
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: rgb(255, 255, 255);
+    padding: 10px;
+}
+
+.container {
+    min-height: calc(100vh - 40px * 2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.login-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+.login-header h1 {
+    margin-bottom: 30px;
+    font-size: 35px;
+    text-align: center;
+}
+
+.login-header p {
+    font-size: 22px;
+    text-align: center;
+    color: black;
+}
+
+.login-form {
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    margin-top: 20px;
+}
+
+input[type='email'],
+input[type='password'] {
+    border: 2px solid black;
+    height: 55px;
+    padding: 1rem;
+    width: 100%;
+    transition: background .5s;
+    font-size: 18px;
+    outline: none;
+    border-radius: 5px;
+}
+
+input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+}
+
+button {
+    border: none;
+    background: black;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 18px;
+    height: 55px;
+    cursor: pointer;
+    margin-left: 165px;
+    margin-top: 20px;
+}
+
+.login-form-footer a {
+    display: flex;
+    align-items: center;
+    gap: 100px;
+    color: black;
+    text-decoration: none;
+    margin-bottom: 10px;
+    font-size: 18px;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+    transition: background-color 0.5s ease;
+}
+
+.horizontal-line-container {
+    position: relative;
+    padding: 20px 0; /* Espaçamento para cima e para baixo */
+  }
+
+  .horizontal-line {
+    border: none;
+    border-top: 1px solid grey;
+  }
+
+  .centered-text {
+    position: absolute;
+    top: 20px; /* Ajuste aqui a posição vertical do texto em relação à linha */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 0 10px;
+    color: grey;
+  }
+
+.login-form-footer a:hover {
+    background-color: black;
+    color: white;
+}
+
+.google {
+    padding: 1px;
+}
+
+.createcon{
+    
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
